@@ -1,9 +1,11 @@
 export default function({ types: t, template }) {
   return {
     visitor: {
-      ImportDeclaration(path) {
+      ImportDeclaration(path, state) {
         let source = path.node.source.value;
-        if (source !== 'react-loadable') return;
+
+        if (state.opts.importPath && source !== state.opts.importPath) return;
+        else if (source !== 'react-loadable') return;
 
         let defaultSpecifier = path.get('specifiers').find(specifier => {
           return specifier.isImportDefaultSpecifier();
